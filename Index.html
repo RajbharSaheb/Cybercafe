@@ -1,21 +1,572 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <title>RAJBHAR-SAHEB Cyber Cafe Tools</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMSY Family Declaration Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .table-section {
+            margin: 30px 0;
+        }
+
+        .table-section h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        td input {
+            border: 1px solid #cbd5e0;
+            padding: 8px;
+        }
+
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .upload-box {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: #f7fafc;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-box:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+
+        .upload-box h4 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .upload-box p {
+            color: #718096;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .signature-section {
+            margin: 30px 0;
+        }
+
+        .signature-upload {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: #f7fafc;
+            max-width: 400px;
+        }
+
+        .submit-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4);
+        }
+
+        .declaration-text {
+            background: #fff5f5;
+            border-left: 4px solid #fc8181;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-section {
+                grid-template-columns: 1fr;
+            }
+
+            .form-content {
+                padding: 20px;
+            }
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 10px;
+            color: #48bb78;
+            font-weight: 600;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Cyber Cafe Work Tools</h1>
+    <div class="container">
+        <div class="header">
+            <h1>मुख्यमंत्री सेहत योजना (MMSY)</h1>
+            <p>Family Declaration Form for New Families</p>
+        </div>
 
-  <div class="grid">
-    <button onclick="openTool('pdf-merge')">Merge PDF</button>
-    <button onclick="openTool('passport')">Passport Photo (A4)</button>
-    <button onclick="openTool('aadhar-print')">Aadhaar Print</button>
-    <button onclick="openTool('voter-print')">Voter Print</button>
-  </div>
+        <div class="form-content">
+            <form id="mmsyForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="relation">I ____ (S/o/D/o/W/o)</label>
+                        <input type="text" id="relation" placeholder="Enter relation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="houseNo">House No.</label>
+                        <input type="text" id="houseNo" placeholder="Enter house number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="village">Village/Town</label>
+                        <input type="text" id="village" placeholder="Enter village/town" required>
+                    </div>
+                </div>
 
-  <div id="workspace"></div>
-  <script src="script.js"></script>
+                <div class="form-group">
+                    <label for="district">District</label>
+                    <input type="text" id="district" placeholder="Enter district" required>
+                </div>
+
+                <div class="table-section">
+                    <h3>Family Members Details</h3>
+                    <p style="color: #718096; font-size: 14px; margin-bottom: 15px;">
+                        I hereby solemnly affirm and declare the following members of my family:
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">S.No.</th>
+                                <th>Name</th>
+                                <th>Relation</th>
+                                <th style="width: 80px;">Age</th>
+                                <th>Voter ID no.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="familyTable">
+                            <!-- Rows will be generated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="upload-section">
+                    <div class="upload-box">
+                        <h4>Voter ID (Front)</h4>
+                        <p>Upload the front side of your Voter ID</p>
+                        <button type="button" class="upload-btn" onclick="document.getElementById('voterFront').click()">
+                            Choose File
+                        </button>
+                        <input type="file" id="voterFront" accept="image/*" onchange="previewImage(this, 'voterFrontPreview')">
+                        <span class="file-name" id="voterFrontName"></span>
+                        <img id="voterFrontPreview" class="preview-img" alt="Voter ID Front">
+                    </div>
+
+                    <div class="upload-box">
+                        <h4>Voter ID (Back)</h4>
+                        <p>Upload the back side of your Voter ID</p>
+                        <button type="button" class="upload-btn" onclick="document.getElementById('voterBack').click()">
+                            Choose File
+                        </button>
+                        <input type="file" id="voterBack" accept="image/*" onchange="previewImage(this, 'voterBackPreview')">
+                        <span class="file-name" id="voterBackName"></span>
+                        <img id="voterBackPreview" class="preview-img" alt="Voter ID Back">
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <h3 style="color: #1e3c72; margin-bottom: 15px;">Signature</h3>
+                    <div class="signature-upload">
+                        <h4>Upload Signature</h4>
+                        <p>Upload an image of your signature</p>
+                        <button type="button" class="upload-btn" onclick="document.getElementById('signature').click()">
+                            Choose File
+                        </button>
+                        <input type="file" id="signature" accept="image/*" onchange="previewImage(this, 'signaturePreview')">
+                        <span class="file-name" id="signatureName"></span>
+                        <img id="signaturePreview" class="preview-img" alt="Signature">
+                    </div>
+                </div>
+
+                <div class="declaration-text">
+                    <strong>Declaration:</strong> That if anytime, any information furnished in respect of the above declared family members and documents submitted by me are found to be false or incorrect or fake, then I shall be liable for any legal action against me as deemed fit by the SHA, along with cancellation of my entitlement under the scheme.
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dated">Dated</label>
+                        <input type="date" id="dated" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="place">Place</label>
+                        <input type="text" id="place" placeholder="Enter place" required>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="button" class="generate-btn" onclick="generatePDF()">
+                        📄 Download PDF
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Generate 8 family member rows
+        const familyTable = document.getElementById('familyTable');
+        for (let i = 1; i <= 8; i++) {
+            const row = familyTable.insertRow();
+            row.innerHTML = `
+                <td style="text-align: center; font-weight: 600;">${i}</td>
+                <td><input type="text" id="name${i}" placeholder="Name"></td>
+                <td><input type="text" id="memberRelation${i}" placeholder="Relation"></td>
+                <td><input type="text" id="age${i}" placeholder="Age" style="width: 100%;"></td>
+                <td><input type="text" id="voterId${i}" placeholder="Voter ID"></td>
+            `;
+        }
+
+        // Preview image function
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const fileName = input.parentElement.querySelector('.file-name');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    fileName.textContent = '✓ ' + input.files[0].name;
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Generate PDF
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            let yPosition = 20;
+
+            // Title
+            pdf.setFontSize(16);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('Mukh Mantri Sehat Yojana (MMSY)', pageWidth / 2, yPosition, { align: 'center' });
+            yPosition += 7;
+            
+            pdf.setFontSize(12);
+            pdf.text('Family Declaration Form for New Families', pageWidth / 2, yPosition, { align: 'center' });
+            yPosition += 15;
+
+            // Form details
+            pdf.setFontSize(10);
+            pdf.setFont(undefined, 'normal');
+            
+            const relation = document.getElementById('relation').value;
+            const houseNo = document.getElementById('houseNo').value;
+            const village = document.getElementById('village').value;
+            const district = document.getElementById('district').value;
+            
+            pdf.text(`I ________________ (S/o/D/o/W/o) ${relation}`, 15, yPosition);
+            yPosition += 7;
+            pdf.text(`House No. ${houseNo}                Village/Town ${village}`, 15, yPosition);
+            yPosition += 7;
+            pdf.text(`District ${district} do hereby solemnly affirm and declare the following members of my family:`, 15, yPosition);
+            yPosition += 10;
+
+            // Family table
+            const tableData = [];
+            for (let i = 1; i <= 8; i++) {
+                const name = document.getElementById(`name${i}`).value;
+                const memberRelation = document.getElementById(`memberRelation${i}`).value;
+                const age = document.getElementById(`age${i}`).value;
+                const voterId = document.getElementById(`voterId${i}`).value;
+                
+                if (name || memberRelation || age || voterId) {
+                    tableData.push([i.toString(), name, memberRelation, age, voterId]);
+                }
+            }
+
+            if (tableData.length === 0) {
+                tableData.push(['', '', '', '', '']);
+            }
+
+            pdf.autoTable({
+                head: [['S.No.', 'Name', 'Relation', 'Age', 'Voter ID no.']],
+                body: tableData,
+                startY: yPosition,
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 2 },
+                headStyles: { fillColor: [102, 126, 234], textColor: 255 },
+                columnStyles: {
+                    0: { cellWidth: 15 },
+                    1: { cellWidth: 45 },
+                    2: { cellWidth: 35 },
+                    3: { cellWidth: 15 },
+                    4: { cellWidth: 45 }
+                }
+            });
+
+            yPosition = pdf.lastAutoTable.finalY + 10;
+
+            // Check if we need a new page for images
+            if (yPosition > pageHeight - 120) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+
+            // Voter ID Images
+            const voterFrontFile = document.getElementById('voterFront').files[0];
+            const voterBackFile = document.getElementById('voterBack').files[0];
+
+            if (voterFrontFile || voterBackFile) {
+                pdf.setFontSize(11);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Voter ID of Declarant', 15, yPosition);
+                yPosition += 7;
+
+                const imageWidth = 80;
+                const imageHeight = 50;
+
+                if (voterFrontFile) {
+                    const frontImg = await getBase64(voterFrontFile);
+                    pdf.setFontSize(9);
+                    pdf.setFont(undefined, 'normal');
+                    pdf.text('Front:', 15, yPosition);
+                    yPosition += 5;
+                    pdf.addImage(frontImg, 'JPEG', 15, yPosition, imageWidth, imageHeight);
+                    yPosition += imageHeight + 10;
+                }
+
+                if (voterBackFile) {
+                    if (yPosition > pageHeight - 70) {
+                        pdf.addPage();
+                        yPosition = 20;
+                    }
+                    const backImg = await getBase64(voterBackFile);
+                    pdf.setFontSize(9);
+                    pdf.text('Back:', 15, yPosition);
+                    yPosition += 5;
+                    pdf.addImage(backImg, 'JPEG', 15, yPosition, imageWidth, imageHeight);
+                    yPosition += imageHeight + 10;
+                }
+            }
+
+            // Check if we need a new page for declaration
+            if (yPosition > pageHeight - 60) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+
+            // Declaration
+            pdf.setFontSize(9);
+            pdf.setFont(undefined, 'normal');
+            const declarationText = 'That if anytime, any information furnished in respect of the above declared family members and documents submitted by me are found to be false or incorrect or fake, then I shall be liable for any legal action against me as deemed fit by the SHA, along with cancellation of my entitlement under the scheme.';
+            const splitDeclaration = pdf.splitTextToSize(declarationText, pageWidth - 30);
+            pdf.text(splitDeclaration, 15, yPosition);
+            yPosition += (splitDeclaration.length * 5) + 10;
+
+            // Date and Place
+            const dated = document.getElementById('dated').value;
+            const place = document.getElementById('place').value;
+            
+            pdf.text(`Dated: ${dated}`, 15, yPosition);
+            yPosition += 7;
+            pdf.text(`Place: ${place}`, 15, yPosition);
+            yPosition += 15;
+
+            // Signature
+            const signatureFile = document.getElementById('signature').files[0];
+            if (signatureFile) {
+                const signatureImg = await getBase64(signatureFile);
+                pdf.text('Signature of Declarant:', pageWidth - 70, yPosition);
+                pdf.addImage(signatureImg, 'JPEG', pageWidth - 70, yPosition + 5, 50, 20);
+            } else {
+                pdf.text('Signature of Declarant: _______________', pageWidth - 80, yPosition);
+            }
+
+            // Save PDF
+            pdf.save('MMSY_Family_Declaration_Form.pdf');
+        }
+
+        // Helper function to convert file to base64
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Set today's date as default
+        document.getElementById('dated').valueAsDate = new Date();
+    </script>
 </body>
 </html>
